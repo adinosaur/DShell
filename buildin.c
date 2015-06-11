@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <error.h>
 #include <string.h>
+#include <stdlib.h>
 
 int buildIn(char** av)
 {
@@ -11,11 +12,12 @@ int buildIn(char** av)
 	}
 	if (strcmp(av[0], "path") == 0)
 	{
-		return 1;
+		strcpy(av[0], "pwd");
+		return 0;
 	}
 	if (strcmp(av[0], "exit") == 0)
 	{
-		return 1;
+		exit(0);
 	}
 	else
 		return 0;
@@ -30,3 +32,4 @@ void cd(char* path)
 	}
 	return 0;
 }
+
