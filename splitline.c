@@ -81,7 +81,8 @@ char* newstr(char *s, int l)
     strncpy(rv, s, l);
     return rv;
 }
-
+/*
+ * 定义在mystrlib.c
 void freelist(char **list)
 {
     char **cp = list;
@@ -104,4 +105,4 @@ void* erealloc(void* p, size_t n)
     if ((rv = realloc(p, n)) == NULL)
         fatal("realloc() failed", "", 1);
     return rv;
-}
+}*/
