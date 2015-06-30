@@ -4,28 +4,33 @@
 #include <string.h>
 #include "smsh.h"
 
+#define RIN '<'
+#define ROUT '>'
+
 int file_mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
 
-int getRFileName(char **av)
+int getRFileName(char *cmd, char *rfileName)
 {
 	int i;
-	for(i = 0; av[i]; ++i)
+	for(i = 0; cmd[i]; ++i)
 	{
-		if(strcmp(av[i], ROUT) == 0)
+		if(cmd[i] == ROUT)
 		{
-			if (!av[i+1])
+			if (!cmd[i+1])
 			{
 				perror("缺少重定向文件名");
 				exit(1);
 			} else {
+				cmd[i] = '\0';
+				strcpy(rfileName, &cmd[i+1]);
 				return i+1;
 			}
 		}
 	}
-	return NULL;
+	return -1;
 }
 
-int r_out(char* filename)
+int r_open(char* filename)
 {
 	int fd_out;
 
@@ -43,3 +48,22 @@ int r_out(char* filename)
 	
 	return fd_out;
 }
+
+int r_close(int fd)
+{
+	dup2(fd, STDOUT_FILENO);
+}
+
+/*
+int main()
+{
+	char rfileName[20];
+	char cmd[] = "ls > test.txt";
+	int res = getRFileName(cmd, rfileName);
+	printf("rfileName : %s\n", rfileName);
+	int fd = r_open(rfileName);
+	printf("hello world\n");
+	close(fd);
+	printf("hello world\n");
+	return 0;
+}*/
